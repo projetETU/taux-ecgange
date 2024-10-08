@@ -1,8 +1,12 @@
 import requests
-import schedule
+from dotenv import load_dotenv
 import datetime
 import os
 import json
+
+load_dotenv()
+api_token = os.getenv('API_TOKEN')
+
 
 def api_call(base,date,api_token):
     url = f"https://data.fixer.io/api/latest?access_key={api_token}"
@@ -21,12 +25,34 @@ def create_file(api_token):
 def exists_file(file):
     return os.path.exists(file)
 
-def convert():
-    data = {}
+def empty_file(file):
+    return os.path.getsize(file) == 0 
+   
+    
+def load_json_file(file):
+    with open(file, 'r') as json_file:
+        data = json.load(json_file) 
+    return data
+
+def convert(): 
     date_now = datetime.date.today()
     file = f"{date_now}-ECHANGE-TAUX.json"
     if exists_file(file):
-        
+        if not empty_file(file):
+            data = load_json_file(file)
+        else:
+            create_file(api_token)
+            convert()
+            return
+    else:
+        create_file(api_token)
+        convert()
+        return
+    return data 
+  
+    
+
+
         
 
 
