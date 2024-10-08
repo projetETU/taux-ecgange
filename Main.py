@@ -6,7 +6,7 @@ load_dotenv()
 api_token = os.getenv('API_TOKEN')
 
 
-f.create_file()
+f.create_file(api_token)
 
 
 

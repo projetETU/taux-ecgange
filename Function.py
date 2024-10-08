@@ -3,24 +3,30 @@ import schedule
 import datetime
 import os
 import json
-class Function:
 
-    def __init__(self) :
-        self.date = datetime.date.today()
+def api_call(base,date,api_token):
+    url = f"https://data.fixer.io/api/latest?access_key={api_token}"
+    querry = {"base":f"{base}","date":f"{date}"}
+    response = requests.get(url,params=querry)
+    return response.json()
 
+def create_file(api_token):
+    date_now = datetime.date.today()
+    data = api_call("EUR",date_now,api_token)
+    file = f"{date_now}-ECHANGE-TAUX.json"
+    with open(file,'w') as file :
+        json.dump(data,file,indent=4)
+    print(f"{file} creee")
 
+def exists_file(file):
+    return os.path.exists(file)
 
-    def api_call(base,api_token):
-        url = f"https://data.fixer.io/api/latest?access_key={api_token}"
-        querry = {"base":f"{base}"}
-        response = requests.get(url,params=querry)
-        return response.json()
+def convert():
+    data = {}
+    date_now = datetime.date.today()
+    file = f"{date_now}-ECHANGE-TAUX.json"
+    if exists_file(file):
+        
+        
 
-    def create_file(self):
-        file = f"{self.date}-ECHANGE-TAUX.json"
-        with open(file,'w') as file :
-            json.dump(file,indent=4)
-        print(f"{file} creee")
-
-    # def set_file(api_token):
 
