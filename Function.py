@@ -53,10 +53,3 @@ async def convert(value):
     data =await get_data()  
     response  = data["rates"]["MGA"]*value
     print(response)
-   
-
-
-
-        
-
-
