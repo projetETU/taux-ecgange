@@ -1,12 +1,8 @@
-import os
-from dotenv import load_dotenv
 import Function as f
+import asyncio
 
-load_dotenv()
-api_token = os.getenv('API_TOKEN')
+asyncio.run(f.convert(3000))
 
-
-f.convert()
 
 
 

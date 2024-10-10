@@ -12,6 +12,7 @@ def api_call(base,date,api_token):
     url = f"https://data.fixer.io/api/latest?access_key={api_token}"
     querry = {"base":f"{base}","date":f"{date}"}
     response = requests.get(url,params=querry)
+    print("API UTILISER")
     return response.json()
 
 def create_file(api_token):
@@ -34,7 +35,7 @@ def load_json_file(file):
         data = json.load(json_file) 
     return data
 
-def convert(): 
+async def get_data(): 
     date_now = datetime.date.today()
     file = f"{date_now}-ECHANGE-TAUX.json"
     if exists_file(file):
@@ -42,15 +43,18 @@ def convert():
             data = load_json_file(file)
         else:
             create_file(api_token)
-            convert()
-            return
+            return  await get_data()
     else:
         create_file(api_token)
-        convert()
-        return
+        return await get_data()
     return data 
   
-    
+async def convert(value):
+    data =await get_data()  
+    response  = data["rates"]["MGA"]*value
+    print(response)
+   
+
 
 
         
